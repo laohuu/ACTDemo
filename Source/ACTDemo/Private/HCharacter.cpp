@@ -3,6 +3,7 @@
 
 #include "HCharacter.h"
 
+#include "HInteractionComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -19,7 +20,11 @@ AHCharacter::AHCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
 
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	InteractionComp = CreateDefaultSubobject<UHInteractionComponent>("InteractionComp");
+
+	GetCharacterMovement()
+		->
+		bOrientRotationToMovement = true;
 
 	bUseControllerRotationYaw = false;
 }
@@ -44,8 +49,17 @@ void AHCharacter::PrimaryAttack()
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
 
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+}
+
+void AHCharacter::PrimaryInteract()
+{
+	if (InteractionComp)
+	{
+		InteractionComp->PrimaryInteract();
+	}
 }
 
 void AHCharacter::MoveForward(float Value)
@@ -85,4 +99,5 @@ void AHCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &AHCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &AHCharacter::PrimaryInteract);
 }

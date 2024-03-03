@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "HCharacter.generated.h"
 
+class UHInteractionComponent;
 class UCameraComponent;
 class USpringArmComponent;
 
@@ -15,8 +16,11 @@ class ACTDEMO_API AHCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Attack")
 	TSubclassOf<AActor> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category="Attack")
+	TObjectPtr<UAnimMontage> AttackAnim;
 
 protected:
 	UPROPERTY(VisibleAnywhere)
@@ -25,7 +29,11 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> CameraComp;
 
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UHInteractionComponent> InteractionComp;
+
 	void PrimaryAttack();
+	void PrimaryInteract();
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
