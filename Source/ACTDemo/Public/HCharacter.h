@@ -15,11 +15,20 @@ class ACTDEMO_API AHCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> ProjectileClass;
+
+protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> CameraComp;
+
+	void PrimaryAttack();
+
+	void MoveForward(float Value);
+	void MoveRight(float Value);
 
 public:
 	// Sets default values for this character's properties
@@ -33,7 +42,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void MoveForward(float Value);
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };
